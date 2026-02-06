@@ -1,0 +1,213 @@
+# Vocabulary Configuration
+# Maps various document terminologies to canonical financial concepts
+# This is DATA, not code - extend without changing parser logic
+
+financial_concepts:
+  
+  # PRIMARY FINANCIAL PILLARS
+  
+  coverage_amount:
+    description: "Total financial liability covered by the policy"
+    labels:
+      - "sum insured"
+      - "sum assured"
+      - "idv"
+      - "insured declared value"
+      - "coverage limit"
+      - "insured amount"
+      - "maximum benefit"
+      - "cover amount"
+      - "coverage amount"
+      - "policy cover"
+      - "total cover"
+      - "benefit amount"
+      - "total sum assured"
+      - "total sum insured"
+      - "face amount"
+      - "cover sum"
+    value_type: "currency"
+    required: true
+    
+  base_premium:
+    description: "Premium before taxes and additional charges"
+    labels:
+      - "base premium"
+      - "net premium"
+      - "premium before tax"
+      - "basic premium"
+      - "own damage premium"
+      - "od premium"
+      - "premium (excluding tax)"
+      - "premium excl tax"
+      - "core premium"
+      - "premium"
+      - "installment premium"
+      - "annual premium"
+      - "premium amount"
+    value_type: "currency"
+    required: true
+    
+  tax_amount:
+    description: "Tax component of the premium"
+    labels:
+      - "gst"
+      - "service tax"
+      - "tax amount"
+      - "goods and services tax"
+      - "igst"
+      - "cgst"
+      - "sgst"
+      - "tax"
+      - "gst amount"
+      - "service tax amount"
+      - "total gst"
+      - "total tax"
+      - "taxes and levies"
+      - "statutory levies"
+    value_type: "currency"
+    required: true
+    
+  total_premium:
+    description: "Total amount payable by customer"
+    labels:
+      - "total premium"
+      - "gross premium"
+      - "premium payable"
+      - "amount payable"
+      - "total amount"
+      - "final premium"
+      - "total payable"
+      - "net payable"
+      - "grand total"
+      - "total amount payable"
+      - "total premium payable"
+      - "total amount to be paid"
+      - "amount to be paid"
+    value_type: "currency"
+    required: true
+    
+  policy_start_date:
+    description: "Date when coverage begins"
+    labels:
+      - "period of insurance from"  # PRIORITY: Most specific
+      - "policy period from"
+      - "coverage from"
+      - "policy start date"
+      - "commencement of membership"  # Life insurance specific
+      - "inception date"
+      - "start date"
+      - "effective from"
+      - "coverage start"
+      - "commencement date"
+      - "date of commencement"
+      - "valid from"
+      - "from"  # LAST: Generic fallback
+    value_type: "date"
+    required: true
+    
+  policy_end_date:
+    description: "Date when coverage ends"
+    labels:
+      - "period of insurance to"  # PRIORITY: Most specific
+      - "policy period to"
+      - "cover expiry date"  # Specific - found in life insurance docs
+      - "coverage expiry date"
+      - "coverage to"
+      - "policy end date"
+      - "expiry date"  # More specific than just "to"
+      - "expiration date"
+      - "valid till"
+      - "valid until"
+      - "coverage end"
+      - "termination date"
+      - "loan termination date"
+      - "to"  # LAST: Generic fallback
+    value_type: "date"
+    required: true
+    
+  policy_term:
+    description: "Duration of policy coverage"
+    labels:
+      - "policy term"
+      - "coverage period"
+      - "tenure"
+      - "policy duration"
+      - "term"
+      - "period"
+      - "duration"
+      - "policy period"
+      - "cover option"  # Life insurance: "cover option 8 years"
+    value_type: "duration"
+    required: false
+    
+  # SECONDARY FINANCIAL PILLARS
+  
+  deductible_amount:
+    description: "Amount the insured must pay before coverage applies"
+    labels:
+      - "medical cover"  # For travel insurance tables where deductible appears in Medical Cover row
+      - "deductible"
+      - "deductibles"  # Plural form (table column headers)
+      - "excess"
+      - "policy excess"
+      - "compulsory excess"
+      - "compulsory deductible"
+      - "voluntary deductible"
+      - "minimum excess"
+      - "voluntary excess"
+      - "deductible amount"
+      - "own risk"
+    value_type: "currency"
+    required: false
+    
+  co_pay_percentage:
+    description: "Percentage of costs shared by the insured"
+    labels:
+      - "co-pay"
+      - "copay"
+      - "co-payment"
+      - "copayment"
+      - "cost sharing"
+      - "patient share"
+      - "insured share"
+      - "co pay"
+      - "co payment percentage"
+    value_type: "percentage"
+    required: false
+
+# Context signals that help validate field proximity
+context_signals:
+  currency_indicators:
+    - "rs"
+    - "inr"
+    - "₹"
+    - "rupees"
+    - "/-"
+    - "amount"
+    
+  date_indicators:
+    - "date"
+    - "from"
+    - "to"
+    - "period"
+    - "valid"
+    
+  percentage_indicators:
+    - "%"
+    - "percent"
+    - "percentage"
+
+# Insurance type specific hints (optional, for future enhancement)
+insurance_types:
+  life:
+    relevant_concepts: ["coverage_amount", "base_premium", "tax_amount", "total_premium", 
+                       "policy_start_date", "policy_end_date", "policy_term"]
+  health:
+    relevant_concepts: ["coverage_amount", "base_premium", "tax_amount", "total_premium", 
+                       "policy_start_date", "policy_end_date", "deductible_amount", "co_pay_percentage"]
+  motor:
+    relevant_concepts: ["coverage_amount", "base_premium", "tax_amount", "total_premium", 
+                       "policy_start_date", "policy_end_date", "deductible_amount"]
+  travel:
+    relevant_concepts: ["coverage_amount", "base_premium", "tax_amount", "total_premium", 
+                       "policy_start_date", "policy_end_date", "deductible_amount"]
