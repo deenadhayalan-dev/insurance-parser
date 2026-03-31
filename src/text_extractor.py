@@ -101,8 +101,7 @@ class TextExtractor:
                 ocrmypdf.ocr(
                     self.pdf_path,
                     tmp_path,
-                    force_ocr=True,
-                    skip_text=True,  # Force OCR even if text exists
+                    redo_ocr=True,  # Remove existing text and redo OCR
                     language=['eng'],  # Can add 'hin' for Hindi if needed
                     optimize=0,  # Don't optimize, just OCR
                     progress_bar=False
